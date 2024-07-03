@@ -11,7 +11,36 @@ import { Drawer,
 import InboxIcon from '@mui/icons-material/Inbox';
 import { Box } from '@mui/system'
 import { useDrawerContext } from '../../contexts';
+import { useNavigate, useResolvedPath, useMatch } from 'react-router-dom'
 
+interface IListItemLinkProps {
+    label: string
+    icon: string
+    to: string
+    onClick: (() => void) | undefined
+}
+
+const ListItemLink: React.FC <IListItemLinkProps> = ({ to, icon, label, onClick }) => {
+    const navigate = useNavigate();
+
+    const resolvedPath = useResolvedPath(to);
+    const match = useMatch({ path: resolvedPath.pathname, end: false });
+
+    const handleClick = () => {
+        navigate(to);
+        onClick?.();
+    };
+
+    return ( 
+        <ListItemButton selected={!!match} onClick={handleClick}>
+            <ListItemIcon>
+                <Icon>{icon}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={label} />
+        </ListItemButton> 
+    );
+}
+ 
 interface IMenuLateralProp {
     children: React.ReactNode
 }
@@ -32,12 +61,12 @@ export const MenuLateral: React.FC<IMenuLateralProp> = ({ children }) => {
                     <Divider />
                     <Box flex={1}>
                         <List component="nav">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Icon>home</Icon>
-                                </ListItemIcon>
-                                <ListItemText primary="Página inicial" />
-                            </ListItemButton>
+                            <ListItemLink 
+                                icon='home'
+                                to='/pagina-inicial'
+                                label='Página inicial'
+                                onClick={smDown ? toggleDrawerOpen : undefined}
+                            />
                         </List>
                     </Box>
                 </Box>
