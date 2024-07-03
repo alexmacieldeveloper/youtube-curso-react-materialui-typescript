@@ -48,7 +48,7 @@ export const MenuLateral: React.FC<IMenuLateralProp> = ({ children }) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext()
+    const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext()
     return (
         <>
             <Drawer open={isDrawerOpen} variant={smDown ? 'temporary' : 'permanent'} onClose={toggleDrawerOpen}>
@@ -61,12 +61,15 @@ export const MenuLateral: React.FC<IMenuLateralProp> = ({ children }) => {
                     <Divider />
                     <Box flex={1}>
                         <List component="nav">
-                            <ListItemLink 
-                                icon='home'
-                                to='/pagina-inicial'
-                                label='Página inicial'
-                                onClick={smDown ? toggleDrawerOpen : undefined}
-                            />
+                            {drawerOptions.map(drawerOption => (
+                                <ListItemLink 
+                                    key={drawerOption.path}
+                                    icon={drawerOption.icon}
+                                    to={drawerOption.path}
+                                    label={drawerOption.label}
+                                    onClick={smDown ? toggleDrawerOpen : undefined}
+                                />
+                            ))}
                         </List>
                     </Box>
                 </Box>
